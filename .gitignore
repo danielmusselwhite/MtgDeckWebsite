@@ -1,0 +1,94 @@
+## .NET / Blazor
+bin/
+obj/
+out/
+
+## User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+
+## Visual Studio
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+
+## Rider
+.idea/
+*.sln.iml
+
+## ASP.NET / Blazor specific
+wwwroot/lib/
+wwwroot/dist/
+wwwroot/_framework/blazor.boot.json
+wwwroot/_framework/blazor.webassembly.js
+wwwroot/_framework/blazor.web.js
+wwwroot/_framework/*.br
+wwwroot/_framework/*.gz
+
+## Published output
+publish/
+app.publish/
+
+## Node (if using npm/yarn for frontend tooling)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+## Environment files
+appsettings.Development.json
+appsettings.Local.json
+.env
+.env.*
+
+## Logs
+*.log
+
+## OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+## Backup files
+*.bak
+*.tmp
+*.old
+*.orig
+
+## NuGet
+*.nupkg
+# Uncomment if you want to ignore all packages (usually not recommended)
+# packages/
+
+## Test results
+TestResults/
+coverage/
+coverage.*
+
+## Azure / deployment artifacts
+.azure/
+*.Publish.xml
+*.pubxml
+*.pubxml.user
+
+## Blazor WebAssembly specific cache
+wwwroot/service-worker-assets.js
+service-worker-assets.js
