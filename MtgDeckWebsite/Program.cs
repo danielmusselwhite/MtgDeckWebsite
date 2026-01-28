@@ -1,4 +1,4 @@
-using BasicWebsite.Components;
+using MtgDeckWebsite.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
