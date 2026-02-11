@@ -1,14 +1,74 @@
 ﻿@page "/login"
+@inject ApplicationDbContext Db
+@inject NavigationManager Nav
+@inject IHttpContextAccessor HttpContextAccessor
+@inject HttpClient Http
+@inject AuthenticationStateProvider AuthStateProvider
+
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using Microsoft.EntityFrameworkCore
 @using MtgDeckWebsite.Components.Layout
+@using MtgDeckWebsite.DataLayer
+@using MtgDeckWebsite.DataLayer.Entities
+@using System.Net.Http
+@using System.Net.Http.Json
+@using MtgDeckWebsite.Services
 @layout AnonymousLayout
 @rendermode InteractiveServer
 
-<!-- todo - add Authorize decorator to this and other pages (obviously replacing with real pages) -->
+<h3>Login</h3>
 
-<PageTitle>Login</PageTitle>
+<input placeholder="Email" @bind="email" />
+<input type="password" placeholder="Password" @bind="password" />
+<button class="btn btn-primary" @onclick="LoginUser">Login</button>
 
-<h1>Login</h1>
+<p>@message</p>
 
 @code {
+    private string email = "";
+    private string password = "";
+    private string message = "";
+    private string returnUrl = "/";
 
+    protected override void OnInitialized()
+    {
+        var uri = Nav.ToAbsoluteUri(Nav.Uri);
+        if (Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query)
+            .TryGetValue("ReturnUrl", out var url))
+        {
+            returnUrl = url;
+        }
+    }
+
+    private async Task LoginUser()
+    {
+        try
+        {
+            var response = await Http.PostAsJsonAsync("/api/login", new { Email = email, Password = password });
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Update the Blazor circuit with authenticated user
+                if (AuthStateProvider is ServerAuthenticationStateProvider customProvider)
+                {
+                    // optional: fetch user ID from your API
+                    customProvider.MarkUserAsAuthenticated(email, 1);
+                }
+
+                // Navigate to the return URL
+                Nav.NavigateTo(returnUrl, true); // force reload ensures cookie is recognized
+            }
+            else
+            {
+                message = "Invalid login credentials.";
+            }
+        }
+        catch (Exception ex)
+        {
+            message = $"Unexpected error: {ex.Message}";
+        }
+    }
 }

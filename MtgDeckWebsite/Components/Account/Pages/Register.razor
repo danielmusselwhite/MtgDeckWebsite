@@ -1,14 +1,41 @@
 ﻿@page "/register"
+@inject ApplicationDbContext Db
+@inject NavigationManager Nav
+@using Microsoft.AspNetCore.Cryptography.KeyDerivation
+@using Microsoft.AspNetCore.Identity
 @using MtgDeckWebsite.Components.Layout
+@using MtgDeckWebsite.DataLayer
+@using MtgDeckWebsite.DataLayer.Entities
 @layout AnonymousLayout
 @rendermode InteractiveServer
 
-<!-- todo - add Authorize decorator to this and other pages (obviously replacing with real pages) -->
+<h3>Register</h3>
 
-<PageTitle>Register</PageTitle>
+<input placeholder="Email" @bind="email" />
+<br />
+<input type="password" placeholder="Password" @bind="password" />
+<br />
+<button @onclick="RegisterUser">Register</button>
 
-<h1>Register</h1>
+<p>@message</p>
 
 @code {
+    private string email = "";
+    private string password = "";
+    private string message = "";
 
+    private async Task RegisterUser()
+    {
+        var user = new AppUser { Email = email };
+
+        // hash the password
+        var hasher = new PasswordHasher<AppUser>();
+        user.PasswordHash = hasher.HashPassword(user, password);
+
+        Db.Users.Add(user);
+        await Db.SaveChangesAsync();
+
+        message = "User registered!";
+        Nav.NavigateTo("/login");
+    }
 }
